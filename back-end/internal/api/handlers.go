@@ -45,17 +45,18 @@ func (h *Handler) Route(ctx context.Context, request events.APIGatewayProxyReque
 
 func (h *Handler) handleClassify(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	log.Println("handleClassify")
+	/*
 	var req models.ClassifyRequest = models.ClassifyRequest{
 		URL: "https://www.google.com",
 	}
-	/*
+		*/
+	var req models.ClassifyRequest
 	if err := json.Unmarshal([]byte(request.Body), &req); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       "Invalid request",
 		}, nil
 	}
-	*/
 
 	// Check if URL is already classified in MongoDB
 	result, err := h.db.GetClassification(ctx, req.URL)
