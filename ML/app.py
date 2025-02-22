@@ -1,4 +1,5 @@
 import json
+import feature_eng
 
 def lambda_handler(event, context):
     # Direct Lambda invocation will receive the event directly
@@ -16,11 +17,15 @@ def lambda_handler(event, context):
             "error": "URL parameter is required"
         }
     
-    message = f"Received URL: {url}"
+    message = f"Received url: {url}"
     print(message)  # This will show up in CloudWatch logs
-    
+    prediction = feature_eng.get_pred(url, "ML/lgb_model.pkl")
+    # 0: benign, 1: defacement, 2: malware, 3: phishing
+
     return {
         "statusCode": 200,
         "message": message,
-        "url": url
+        "url": url,
+        "prediction": prediction
     }
+
