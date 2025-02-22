@@ -1,0 +1,55 @@
+URL Classification Service - Technical Specification
+
+1. Project Overview
+This service will classify URLs as either Malicious or Good using a serverless architecture.
+
+2. Technical Stack
+- Programming Language: Golang
+- Cloud Platform: AWS
+- Core Services:
+  * AWS Lambda (serverless compute)
+  * AWS API Gateway (API endpoint)
+  * AWS DynamoDB (data storage)
+
+3. Project Structure
+/url-classifier/back-end
+├── cmd/
+│   └── main.go         # Lambda handler entry point
+├── internal/
+│   ├── api/
+│   │   └── handlers.go     # API handlers
+│   ├── models/
+│   │   └── classify_request_response.go     # Data models
+│   ├── db/
+│   │   └── dynamodb.go     # DynamoDB operations
+│   └── classifier/
+│       └── classifier.go   # ML model integration
+├── go.mod
+└── go.sum
+
+4. Component Descriptions
+- main.go: Entry point for the Lambda function
+- handlers.go: Handles incoming API requests and responses
+- classify_request_response.go: Defines data structures for API communication
+- dynamodb.go: Manages database operations
+- classifier.go: Contains URL classification logic
+
+5. Data Flow
+1. Client sends URL through API Gateway
+2. Lambda function receives the request
+3. Lambda function checks if the url is already in the database
+4. If the url is not in the database, the lambda function will classify the url
+5. The result is stored in DynamoDB
+6. The response is returned to the client
+
+6. Classification Categories
+- Malicious: URLs identified as potentially harmful
+- Good: URLs identified as safe
+
+7. Implementation Steps
+1. Set up AWS infrastructure
+2. Implement Lambda handler
+3. Create classification logic
+4. Set up DynamoDB schema and operations
+5. Implement API handlers
+6. Test and deploy

@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: URL Classification API SAM Template
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: provided.al2023
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: "'*'"
+
+
+Resources:
+  UrlClassificationFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: go1.x
+    Properties:
+      CodeUri: ./back-end/cmd/
+      Handler: bootstrap.handleRequest
+      Events:
+        GetUrlClassification:
+          Type: Api
+          Properties:
+            Path: /classify
+            Method: GET
+
+Outputs:
+  UrlClassificationFunction:
+    Description: "Url Classification Lambda Function ARN"
+    Value: !GetAtt UrlClassificationFunction.Arn

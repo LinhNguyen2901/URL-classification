@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Hover Link Logger",
+    "version": "1.0",
+    "description": "Logs href of hovered links to the console",
+    "permissions": [],
+    "host_permissions": ["<all_urls>"],
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ]
+  }
