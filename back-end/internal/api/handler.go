@@ -29,21 +29,7 @@ func NewHandler() (*Handler, error) {
 	}, nil
 }
 
-func (h *Handler) Route(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	log.Println("Route", request.Path)
-	switch request.Path {
-	case "/classify":
-		log.Println("classify")
-		return h.handleClassify(ctx, request)
-	default:
-		return events.APIGatewayProxyResponse{
-			StatusCode: 404,
-			Body:       "Not Found",
-		}, nil
-	}
-}
-
-func (h *Handler) handleClassify(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (h *Handler) HandleClassify(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	log.Println("handleClassify")
 	/*
 	var req models.ClassifyRequest = models.ClassifyRequest{

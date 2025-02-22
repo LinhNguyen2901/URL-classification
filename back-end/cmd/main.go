@@ -8,7 +8,7 @@ import (
     "log"
 )
 
-func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func router(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
     log.Println("Received request")
     handler, err := api.NewHandler()
     if err != nil {
@@ -17,9 +17,19 @@ func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
             Body:       err.Error(),
         }, err
     }
-    return handler.Route(ctx, request)
+
+	switch request.Path {
+        case "/classify":
+            log.Println("classify")
+            return handler.HandleClassify(ctx, request)
+        default:
+            return events.APIGatewayProxyResponse{
+                StatusCode: 404,
+                Body:       "Not Found",
+            }, nil
+	}
 }
 
 func main() {
-    lambda.Start(handleRequest)
+    lambda.Start(router)
 }
