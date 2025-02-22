@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Hover URL Saver",
+  "version": "1.0",
+  "description": "Store hovered URLs for later use",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+  }
+}
