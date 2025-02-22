@@ -1,0 +1,1 @@
+cd ../ && sam local start-api

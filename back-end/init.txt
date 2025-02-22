@@ -47,9 +47,13 @@ This service will classify URLs as either Malicious or Good using a serverless a
 - Good: URLs identified as safe
 
 7. Implementation Steps
-1. Set up AWS infrastructure
-2. Implement Lambda handler
-3. Create classification logic
-4. Set up DynamoDB schema and operations
-5. Implement API handlers
-6. Test and deploy
+- Set up AWS infrastructure
+- Implement Lambda handler
+- Create classification logic
+- Set up DynamoDB schema and operations
+- Implement API handlers
+- Test and deploy
+
+8. Testing
+- run `./internal/scripts/build_sam.sh` to build the sam package
+- run `./internal/scripts/run_sam.sh` to run the sam package locally
