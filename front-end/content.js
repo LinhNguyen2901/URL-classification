@@ -6,7 +6,7 @@ document.body.appendChild(popup);
 function storeURL(url, link) {
     console.log("Storing URL:", url);
 
-    fetch("https://backend", { // Send back to API
+    fetch("http://localhost:3000/classify", { // Send back to API
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -16,6 +16,7 @@ function storeURL(url, link) {
     .then(response => response.json())
     .then(data => {
         console.log("Response from backend:", data);
+        console.log("Category:", data.category);
         popup.textContent = data.category;
     })
     .catch(error => {

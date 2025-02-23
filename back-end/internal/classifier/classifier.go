@@ -68,6 +68,12 @@ func (c *URLClassifier) Classify(ctx context.Context, url string) (category stri
     // Since the Flask API doesn't return confidence, we'll return 1.0 as default
     if response.Category == 0 {
         return "benign", 1.0, nil
+    } else if response.Category == 1 {
+        return "defacement", 1.0, nil
+    } else if response.Category == 2 {
+        return "malware", 1.0, nil
+    } else if response.Category == 3 {
+        return "phishing", 1.0, nil
     }
-    return "malicious", 1.0, nil
+    return "unknown", 0.0, nil
 }
