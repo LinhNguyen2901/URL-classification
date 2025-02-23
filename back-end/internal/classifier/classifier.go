@@ -32,11 +32,19 @@ func NewURLClassifier() *URLClassifier {
 }
 
 func (c *URLClassifier) Classify(ctx context.Context, url string) (category string, confidence float64, err error) {
+    // Trim http:// or https:// from the URL
+    trimmedURL := url
+    if prefix := "https://"; len(url) >= len(prefix) && url[:len(prefix)] == prefix {
+        trimmedURL = url[len(prefix):]
+    } else if prefix := "http://"; len(url) >= len(prefix) && url[:len(prefix)] == prefix {
+        trimmedURL = url[len(prefix):]
+    }
+    
     // Prepare the request payload
     payload := struct {
         URL string `json:"url"`
     }{
-        URL: url,
+        URL: trimmedURL,
     }
 
     // Convert payload to JSON
