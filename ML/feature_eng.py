@@ -92,7 +92,7 @@ def shortening_service(url):
     
 #First Directory Length
 def fd_length(url):
-    urlpath= urlparse(url).path
+    urlpath= urlparse(url).path 
     try:
         return len(urlpath.split('/')[1])
     except:
