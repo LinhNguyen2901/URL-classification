@@ -153,10 +153,8 @@ def get_pred(url, model_path):
     # Make predictions
     X_test = df
     X_test.fillna(0, inplace=True)
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X_test)
-    X_tensor = torch.tensor(X_scaled, dtype=torch.float32)
-    
+    X_tensor = torch.tensor(X_test.values, dtype=torch.float32)
+
     # Model instance
     input_dim = X_tensor.shape[1]
     num_classes = 4
@@ -180,5 +178,4 @@ def get_pred(url, model_path):
     prediction = torch.argmax(prediction)
 
     return prediction.item()
-
 
