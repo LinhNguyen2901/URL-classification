@@ -19,7 +19,7 @@ def lambda_handler(event, context):
     
     message = f"Received url: {url}"
     print(message)  # This will show up in CloudWatch logs
-    prediction = feature_eng.get_pred(url, "ML/lgb_model.pkl")
+    prediction = feature_eng.get_pred(url, "ML/DL_model.pth")
     # 0: benign, 1: defacement, 2: malware, 3: phishing
 
     return {
