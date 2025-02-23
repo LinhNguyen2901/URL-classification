@@ -1,30 +1,12 @@
-from datasets import load_dataset
-from datasets import Dataset, DatasetDict
 import pandas as pd
-import seaborn as sns
-import numpy as np
-import matplotlib.pyplot as plt
-import string
 
 # Import label encoder
-from sklearn import preprocessing, metrics
+
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import classification_report, mean_squared_error,confusion_matrix, f1_score, accuracy_score, precision_score, recall_score, auc,roc_curve
-from sklearn.model_selection import train_test_split
-from collections import Counter
-import xgboost as xgb
-from lightgbm import LGBMClassifier
-from xgboost import XGBClassifier
-import os
-import socket
-import whois
-from datetime import datetime
-import time
-from bs4 import BeautifulSoup
-import urllib
-import bs4
-import os
-from transformers import AutoTokenizer, AutoModel
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset, random_split
 import re
 from urllib.parse import urlparse
 from urllib.parse import urlparse
@@ -118,6 +100,25 @@ def letter_count(url):
             letters = letters + 1
     return letters
 
+# Define the model class
+class ClassifierModel(nn.Module):
+    def __init__(self, input_dim, num_classes):
+        super(ClassifierModel, self).__init__()
+        self.network = nn.Sequential(
+            nn.Linear(input_dim, 64),
+            nn.ReLU(),
+            nn.BatchNorm1d(64),
+            nn.Dropout(0.3),
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.BatchNorm1d(32),
+            nn.Dropout(0.2),
+            nn.Linear(32, num_classes)
+        )
+
+    def forward(self, x):
+        return self.network(x)
+    
 def get_pred(url, model_path):
     df = pd.DataFrame({"url": [url]})
     
@@ -149,19 +150,35 @@ def get_pred(url, model_path):
        'hostname_length', 'sus_url', 'fd_length', 'tld_length', 'count-digits',
        'count-letters']]
     
-    with open(model_path, "rb") as file:
-        loaded_model = pickle.load(file)
-
-    print("Model loaded successfully!")
-
     # Make predictions
     X_test = df
     X_test.fillna(0, inplace=True)
     scaler = StandardScaler()
-    X_test_scaled = scaler.fit_transform(X_test)
+    X_scaled = scaler.fit_transform(X_test)
+    X_tensor = torch.tensor(X_scaled, dtype=torch.float32)
+    
+    # Model instance
+    input_dim = X_tensor.shape[1]
+    num_classes = 4
+    model = ClassifierModel(input_dim, num_classes)
+    
+    path = model_path
+    model = ClassifierModel(input_dim, num_classes)
 
-    print(X_test_scaled.shape)
-    prediction = loaded_model.predict(X_test_scaled)
-    return prediction
+    # Loss and optimizer
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+    checkpoint = torch.load(path)
+    # Load the state_dict into the model and optimizer
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    model.eval()
+    # Make prediction
+    with torch.no_grad():
+        prediction = model(X_tensor)
+
+    prediction = torch.argmax(prediction)
+
+    return prediction.item()
 
 
