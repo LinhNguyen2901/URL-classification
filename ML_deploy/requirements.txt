@@ -1,0 +1,9 @@
+datasets
+pandas
+scikit-learn
+xgboost
+python-whois
+beautifulsoup4
+transformers
+tld
+torch

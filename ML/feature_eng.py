@@ -168,7 +168,7 @@ def get_pred(url, model_path):
     # Loss and optimizer
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    checkpoint = torch.load(path)
+    checkpoint = torch.load(path,map_location=torch.device('cpu'))
     # Load the state_dict into the model and optimizer
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])

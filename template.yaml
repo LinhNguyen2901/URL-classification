@@ -19,8 +19,13 @@ Resources:
     Metadata:
       BuildMethod: go1.x
     Properties:
-      CodeUri: ./back-end/cmd/
-      Handler: bootstrap.handleRequest
+      CodeUri: ./back-end/
+      Handler: bootstrap
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: lambda:InvokeFunction
+              Resource: !GetAtt MLFunction.Arn
       Events:
         GetUrlClassification:
           Type: Api
@@ -32,3 +37,7 @@ Outputs:
   UrlClassificationFunction:
     Description: "Url Classification Lambda Function ARN"
     Value: !GetAtt UrlClassificationFunction.Arn
+
+  MLFunction:
+    Description: "ML Lambda Function ARN"
+    Value: !GetAtt MLFunction.Arn
